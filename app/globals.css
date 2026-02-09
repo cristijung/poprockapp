@@ -3,6 +3,9 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --primary-color: #7832b1; /*p explicar q dá p usar as var de css no scss*/
+  --bg-black: #000000;
+  --text-light: #ffffff;
 }
 
 @theme inline {
