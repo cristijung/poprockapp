@@ -21,7 +21,7 @@ export default function TicketModal({ isOpen, onClose }: TicketModalProps) {
                 </button>
 
                 <h2>Garanta seu Ingresso!</h2>
-
+                Teste
                 <TicketForm />
 
             </div>

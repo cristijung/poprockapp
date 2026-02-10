@@ -2,7 +2,7 @@
 export default function Agenda() {
     return(
         <>
-        Agenda
+        <h1>Agenda</h1>
         </>
     );
 }

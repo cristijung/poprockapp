@@ -3,7 +3,7 @@
 export default function Bandas() {
     return(
         <>
-        Bandas
+        <h1>Bandas</h1>
         </>
     );
 }

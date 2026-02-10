@@ -3,7 +3,7 @@
 export default function Contato() {
     return(
         <>
-        Contato
+        <h1>Contato</h1>
         </>
     );
 }
