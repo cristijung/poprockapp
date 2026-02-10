@@ -42,6 +42,7 @@ export default function Header() {
 
       <nav className={`${styles.nav} ${isMenuOpen ? styles.navOpen : ''}`}>
         <Link href="/" onClick={closeMenu}>Home</Link>
+        <Link href="/artistas" onClick={closeMenu}>Artistas</Link>
         <Link href="/bandas" onClick={closeMenu}>Bandas</Link>
         <Link href="/agenda" onClick={closeMenu}>Agenda</Link>
         <Link href="/contato" onClick={closeMenu}>Contato</Link>

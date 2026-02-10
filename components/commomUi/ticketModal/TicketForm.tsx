@@ -1,39 +1,54 @@
-'use client';
+"use client";
 
 import { useState } from 'react';
 import styles from './TicketForm.module.scss';
 
 export default function TicketForm() {
-    const [formData, setFormData] = useState({
-        nome: '',
-        email: '',
-        evento: '',
-        quantidade: 1
-    });
+  const [formData, setFormData] = useState({
+    nome: '',
+    email: '',
+    evento: '',
+    quantidade: 1
+  });
 
-    const [isSuccess, setIsSuccess] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
-    // validação calculada durante a renderização
-    const isFormValid =
-        formData.nome.trim().length > 3 &&
-        formData.email.includes('@') &&
-        formData.evento !== '' &&
-        formData.quantidade > 0;
+  // validação calculada durante a renderização
+  const isFormValid = 
+    formData.nome.trim().length > 3 && 
+    formData.email.includes('@') && 
+    formData.evento !== '' && 
+    formData.quantidade > 0;
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
-    };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (isFormValid) {
-            setIsSuccess(true); //vai ativar a tela de sucesso
-        }
-    };
-    
-    if (isSuccess) {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (isFormValid) {
+      setIsSuccess(true); // ativa a tela de sucesso 
+    }
+  };
+
+  // se a compra for um sucesso, arrumadooooooooooooo
+  if (isSuccess) {
     return (
+      <div className={styles.successContainer}>
+        <div className={styles.checkIcon}></div>
+        <h2>Reserva Confirmada!</h2>
+        <div className={styles.summary}>
+          <p><strong>Fã:</strong> {formData.nome}</p>
+          <p><strong>Show:</strong> {formData.evento}</p>
+          <p><strong>Ingressos:</strong> {formData.quantidade}</p>
+        </div>
+        <p className={styles.footerNote}>Enviamos os detalhes para {formData.email}</p>
+      </div>
+    );
+  }
+
+  return (
     <form className={styles.ticketForm} onSubmit={handleSubmit}>
       <div className={styles.inputGroup}>
         <label htmlFor="nome">Nome Completo</label>
@@ -45,7 +60,7 @@ export default function TicketForm() {
           onChange={handleChange} 
         />
         {formData.nome.length > 0 && formData.nome.length <= 3 && (
-          <span className={styles.errorMessage}>O nome está muito curto ✍️</span>
+          <span className={styles.errorMessage}>O nome está muito curto!</span>
         )}
       </div>
 
@@ -59,7 +74,7 @@ export default function TicketForm() {
           onChange={handleChange} 
         />
         {formData.email.length > 0 && !formData.email.includes('@') && (
-          <span className={styles.errorMessage}>Insira um e-mail válido 📧</span>
+          <span className={styles.errorMessage}>Insira um e-mail válido</span>
         )}
       </div>
 
@@ -78,9 +93,8 @@ export default function TicketForm() {
         className={isFormValid ? styles.submitBtn : styles.disabledBtn} 
         disabled={!isFormValid}
       >
-        {isFormValid ? "Finalizar Compra 🤘" : "Preencha todos os campos"}
+        {isFormValid ? "Finalizar Compra" : "Preencha todos os campos"}
       </button>
     </form>
   );
-}
 }

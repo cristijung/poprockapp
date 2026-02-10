@@ -1,31 +1,28 @@
-'use client';
+"use client";
 
 import styles from './TicketModal.module.scss';
 import { FaTimes } from 'react-icons/fa';
-import TicketForm from './TicketForm';
-
+import TicketForm from './TicketForm'; 
 interface TicketModalProps {
-    isOpen: boolean;
-    onClose: () => void;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
 export default function TicketModal({ isOpen, onClose }: TicketModalProps) {
-    if (!isOpen) return null;
+  if (!isOpen) return null;
 
-    return (
-        <>
-        <div className={styles.modalOverlay} onClick={onClose}>
-            <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-                <button className={styles.closeBtn} onClick={onClose}>
-                    <FaTimes />
-                </button>
-
-                <h2>Garanta seu Ingresso!</h2>
-                Teste
-                <TicketForm />
-
-            </div>
-        </div>
-        </>
-    );
-} 
+  return (
+    <div className={styles.modalOverlay} onClick={onClose}>
+      <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+        <button className={styles.closeBtn} onClick={onClose}>
+          <FaTimes />
+        </button>
+        
+        <h2>GARANTA O SEU INGRESSO!!</h2>
+        
+        {/* componente do formulário aqui */}
+        <TicketForm /> 
+      </div>
+    </div>
+  );
+}
