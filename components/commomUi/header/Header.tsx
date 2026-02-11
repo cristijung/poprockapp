@@ -1,30 +1,44 @@
 "use client"; 
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { FaUserCircle, FaSignOutAlt, FaSignInAlt } from 'react-icons/fa'; 
 import styles from './Header.module.scss';
 import { useModal } from '@/hooks/useModal';
 import TicketModal from '../ticketModal/TicketModal'; 
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  
-  // ativando o hook para controlar o modal de ingressos
+  const router = useRouter();
   const { isOpen, openModal, closeModal } = useModal();
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  // lazy initializer: evita o erro de renderização em cascata
+  const [isLogged, setIsLogged] = useState(() => {
+    if (typeof window !== "undefined") {
+      return !!localStorage.getItem("user_token");
+    }
+    return false;
+  });
 
-  const closeMenu = () => {
-    setIsMenuOpen(false);
-  };
+  // sincroniza o estado se o usuário deslogar em outra aba
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setIsLogged(!!localStorage.getItem("user_token"));
+    };
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
 
-  // fn p abrir o modal e fechar o menu mobile simultaneamente
-  const handleTicketClick = () => {
-    openModal();
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const closeMenu = () => setIsMenuOpen(false);
+
+  const handleLogout = () => {
+    localStorage.removeItem("user_token");
+    setIsLogged(false);
     closeMenu();
+    router.push('/');
   };
 
   return (
@@ -33,8 +47,7 @@ export default function Header() {
         <Image 
           src="/logoRock.png" 
           alt="Pop Rock Logo"
-          width={180} 
-          height={60} 
+          width={180} height={60} 
           className={styles.logoImage}
           priority 
         />
@@ -47,30 +60,52 @@ export default function Header() {
         <Link href="/agenda" onClick={closeMenu}>Agenda</Link>
         <Link href="/contato" onClick={closeMenu}>Contato</Link>
         
-        {/* CTA mobile */}
-        <button className={styles.ctaButtonMobile} onClick={handleTicketClick}>
+        <div className={styles.authMobile}>
+          {isLogged ? (
+            <>
+              <Link href="/admin" onClick={closeMenu} className={styles.userLink}>
+                <FaUserCircle size={22} /> Área VIP
+              </Link>
+              <button onClick={handleLogout} className={styles.logoutBtn}>
+                <FaSignOutAlt size={20} /> Sair
+              </button>
+            </>
+          ) : (
+            <Link href="/login" onClick={closeMenu} className={styles.userLink}>
+              <FaSignInAlt size={20} /> Entrar
+            </Link>
+          )}
+        </div>
+        <button className={styles.ctaButtonMobile} onClick={() => { openModal(); closeMenu(); }}>
           Ingressos
         </button>
       </nav>
 
-      {/* CTA desktop */}
-      <button className={styles.ctaButton} onClick={openModal}>
-        Ingressos
+      <div className={styles.actionsDesktop}>
+        {isLogged ? (
+          <div className={styles.userActions}>
+            <Link href="/admin" title="Área VIP">
+              <FaUserCircle className={styles.userIcon} size={30} />
+            </Link>
+            <button onClick={handleLogout} className={styles.iconBtn} title="Sair">
+              <FaSignOutAlt size={24} />
+            </button>
+          </div>
+        ) : (
+          <Link href="/login" className={styles.iconBtn} title="Login">
+            <FaSignInAlt size={24} />
+          </Link>
+        )}
+        <button className={styles.ctaButton} onClick={openModal}>Ingressos</button>
+      </div>
+
+      <button className={`${styles.hamburger} ${isMenuOpen ? styles.active : ''}`} onClick={toggleMenu}>
+        <span className={styles.bar}></span>
+        <span className={styles.bar}></span>
+        <span className={styles.bar}></span>
       </button>
 
-      <button 
-        className={`${styles.hamburger} ${isMenuOpen ? styles.active : ''}`} 
-        onClick={toggleMenu}
-        aria-label="Abrir menu"
-      >
-        <span className={styles.bar}></span>
-        <span className={styles.bar}></span>
-        <span className={styles.bar}></span>
-      </button>
-
-      {/* modal de form de compra */}
       <TicketModal isOpen={isOpen} onClose={closeModal} />
-
       {isMenuOpen && <div className={styles.overlay} onClick={closeMenu}></div>}
     </header>
   );
