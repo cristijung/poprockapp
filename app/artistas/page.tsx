@@ -1,5 +1,5 @@
 import ArtistList from "@/components/artistsList/ArtistsList";
-
+import styles from './Artistas.module.scss';
 
 export default function Artistas() {
     return(

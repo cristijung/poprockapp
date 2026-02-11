@@ -1,5 +1,6 @@
 "use client";
 import { useApi } from "@/hooks/useApi";
+import Link from "next/link";
 import { fetchUsers } from "@/services/api";
 import styles from "./List.module.scss";
 
@@ -17,11 +18,22 @@ export default function ArtistList() {
 
   return (
     <>
-      <ul className={styles.list}>
-        {users?.map((user) => (
-          <li key={user.id}>{user.name}</li>
-        ))}
-      </ul>
+      <nav className={styles.container}>
+        <ul className={styles.list}>
+          {users?.map((user) => {
+            //criação do slug amigável - ex: "Ana Banana -> ana-banana"
+            const slug = user.name.toLowerCase().replace(/ /g, "-");
+
+            return (
+              <li key={user.id} className={styles.item}>
+                <Link href={`/artistas/${slug}`} className={styles.item}>
+                  {user.name}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
     </>
   );
 }
