@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import Header from './Header';
 
-// mock do roteador --> importante p o Next.js 15/16
+// mock do roteador --> importante p o Next.js acima do 14/15/16
 // dica: Se usarmos muitos mocks, pode ser útil movê-los para um arquivo __mocks__ 
 // ou para o setupFilesAfterEnv do Jest...
 jest.mock('next/navigation', () => ({
@@ -24,13 +24,15 @@ jest.mock('@/hooks/useModal', () => ({
   }),
 }));
 
-describe('Header Component - Interações', () => {
+// bloco de descrição do q queremos testar
+describe('Header Componente - Interações', () => {
+  // fn usada p definir um TESTE INDIVIDUAL - é o básico
   it('deve renderizar o elemento principal de navegação', () => {
     render(<Header />);
     
     // verifica se a tag <header> ou o elemento com role banner está presente
     const headerElement = screen.getByRole('banner');
-    expect(headerElement).toBeInTheDocument();
+    expect(headerElement).toBeInTheDocument(); // asserção do meu teste
   });
 
   it('deve exibir o logo ou título do sistema', () => {
